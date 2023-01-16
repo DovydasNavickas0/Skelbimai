@@ -1,0 +1,22 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+import { firebaseConfig } from "./modules/database.mjs"
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+import { getDatabase } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+import { UserRegLogin } from "./modules/UserRegLogin.mjs";
+import { UserLogout } from "./modules/UserLogout.mjs";
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+const db = getDatabase();
+
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        const uid = user.uid;
+        console.log("User is active");
+        UserLogout()
+    }
+    else{
+        console.log("User is inactive");
+        UserRegLogin()
+    }
+})
