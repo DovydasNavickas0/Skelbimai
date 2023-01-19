@@ -6,14 +6,21 @@ const auth = getAuth();
 
 const UserLogout = () => {
 
-    const root = document.getElementById('root')
+    const root = document.getElementById('header')
+
+    const extradiv = document.createElement('div')
+    extradiv.classList.add("col-md-1", "mx-0", "p-0", "m-0", 'd-flex', 'justify-content-around')
     
-    const signout = document.createElement('button')
-    const li = document.createElement('li')
-    li.classList.add("bi", "bi-person-dash-fill")
+    const signout = document.createElement('button')                            //the button itself
+    signout.classList.add("p-2", 'btn', 'btn-outline-dark', 'ps-3', 'pe-3')
+
+    const li = document.createElement('li')                                     //the symbol
+    li.classList.add("bi-person-dash-fill", 'list-unstyled')
     
-    root.appendChild(signout)
+    root.appendChild(extradiv)
+    extradiv.appendChild(signout)
     signout.appendChild(li)
+
 
     const logout = () => {
         signOut(auth).then(() => {
@@ -23,7 +30,7 @@ const UserLogout = () => {
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            console.log(error.message)
+            alert(error.message)
         })
     
     }
