@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebas
 import { firebaseConfig } from "./modules/database.mjs"
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 import { getDatabase } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
-import { UserRegLogin } from "./modules/UserRegLogin.mjs";
+import { UserStart } from "./modules/UserStart.mjs";
 import { UserLogout } from "./modules/UserLogout.mjs";
 
 const app = initializeApp(firebaseConfig);
@@ -17,6 +17,10 @@ onAuthStateChanged(auth, (user) => {
     }
     else{
         console.log("User is inactive");
-        UserRegLogin()
+        UserStart()
     }
 })
+
+//Admin login
+// johndoe@skb.lt
+// 12345678lt
