@@ -9,10 +9,10 @@ const UserLogout = () => {
     const root = document.getElementById('header')
 
     const extradiv = document.createElement('div')
-    extradiv.classList.add("col-md-1", "mx-0", "p-0", "m-0", 'd-flex', 'justify-content-around')
+    extradiv.classList.add("col-md-1", "mx-0", "p-0", "m-3", 'd-flex', 'justify-content-around')
     
     const signout = document.createElement('button')                            //the button itself
-    signout.classList.add("p-2", 'btn', 'btn-outline-dark', 'ps-3', 'pe-3')
+    signout.classList.add("p-1", 'btn', 'btn-outline-dark', 'ps-2', 'pe-2')
 
     const li = document.createElement('li')                                     //the symbol
     li.classList.add("bi-person-dash-fill", 'list-unstyled')

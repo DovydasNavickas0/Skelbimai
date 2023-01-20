@@ -4,6 +4,8 @@ import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/fi
 import { getDatabase } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 import { UserStart } from "./modules/UserStart.mjs";
 import { UserLogout } from "./modules/UserLogout.mjs";
+import { categorypage } from "./modules/Categories.mjs";
+import { ProductPage } from "./modules/ProductPage.mjs";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
@@ -14,12 +16,15 @@ onAuthStateChanged(auth, (user) => {
         const uid = user.uid;
         console.log("User is active");
         UserLogout()
+        ProductPage()
     }
     else{
         console.log("User is inactive");
         UserStart()
     }
 })
+
+
 
 //Admin login
 // johndoe@skb.lt
