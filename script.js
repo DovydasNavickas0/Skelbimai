@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { firebaseConfig } from "./modules/database.mjs"
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 import { getDatabase } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 import { UserStart } from "./modules/UserStart.mjs";
 import { UserLogout } from "./modules/UserLogout.mjs";
@@ -16,7 +16,7 @@ onAuthStateChanged(auth, (user) => {
         const uid = user.uid;
         console.log("User is active");
         UserLogout()
-        ProductPage()
+        categorypage()
     }
     else{
         console.log("User is inactive");
