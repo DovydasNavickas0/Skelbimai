@@ -1,4 +1,4 @@
-const firebaseConfig = {
+const firebaseConfig = { //firebase keys, ID, and urls
 
     apiKey: "AIzaSyDQ7Dlr638WDgk99HR-YaOpahs_zjrv7SI",
 

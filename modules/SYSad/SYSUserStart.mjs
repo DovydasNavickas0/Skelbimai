@@ -1,20 +1,19 @@
 //import { UserLogin } from "./UserLogin.mjs";
 //import { UserRegister } from "./UserRegister.mjs";
-import { UserErrorChecker } from "./Errors.mjs";
+//import { UserErrorChecker } from "./Errors.mjs";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-import { firebaseConfig } from "./database.mjs"
-import { getAuth, createUserWithEmailAndPassword, 
-    signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+import { firebaseConfig } from "../database.mjs"
+import { getAuth, createUserWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 import {getDatabase, ref, set, update} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getDatabase();
 
-const UserStart = () => { // works, needs css/bootstrap
+const SYSUserStart = () => { // works, needs css/bootstrap
 
     const UserRegLogin = document.createElement('div')
-    UserRegLogin.setAttribute('id', 'mainPage')
+    UserRegLogin.setAttribute('id', 'UserRegLogin')
 
     //Email
     const Email_label = document.createElement('label')
@@ -31,13 +30,21 @@ const UserStart = () => { // works, needs css/bootstrap
     Passwd.setAttribute('placeholder', 'Enter your Password')
 
     //Btns
-    const LoginBTN = document.createElement('button')
-    LoginBTN.textContent = "Login"
     const RegBTN = document.createElement('button')
     RegBTN.textContent = "Register"
 
     const root = document.getElementById('root') //base
     const TextError = document.createElement('p') //Error box
+
+    //Rolls
+    const RollDatalist = document.createElement('select')
+    const USERoption = document.createElement('option')
+    USERoption.innerText = "USER"
+    const ADMINoption = document.createElement('option')
+    ADMINoption.innerText = "ADMIN"
+    RollDatalist.appendChild(USERoption)
+    RollDatalist.appendChild(ADMINoption)
+
 
     root.appendChild(UserRegLogin)
     UserRegLogin.appendChild(TextError)
@@ -45,27 +52,8 @@ const UserStart = () => { // works, needs css/bootstrap
     UserRegLogin.appendChild(Email)
     UserRegLogin.appendChild(Passwd_label)
     UserRegLogin.appendChild(Passwd)
-    UserRegLogin.appendChild(LoginBTN)
+    UserRegLogin.appendChild(RollDatalist)
     UserRegLogin.appendChild(RegBTN)
-
-    const UserLogin = () => {   
-        signInWithEmailAndPassword(auth, Email.value, Passwd.value)
-        .then((userCredential) => {
-            const user = userCredential.user;
-            const loginTime = new Date()
-            update(ref(db, 'users/' + user.uid), {
-                last_login: `${loginTime}`
-            });
-            console.log("Login Succesful")
-            UserRegLogin.remove()
-        })
-        .catch((error) => {
-            //const errorCode = error.code;
-            //const errorMessage = error.message;
-            TextError.textContent = UserErrorChecker(error.code)
-        });
-    
-    }
 
     const UserRegister = () => {
 
@@ -78,20 +66,20 @@ const UserStart = () => { // works, needs css/bootstrap
                     set(ref(db, 'users/' + user.uid),{
                         user_email: Email.value,
                         last_login: `${loginTime}`,
-                        Roll: "USER"
-                }).then(
-                    set(ref(db, 'Rolls/' + `/USER/` + user.uid),{
-                        user_email: Email.value
-                }))
-                    console.log("Register Succesful")                //turn off when done
-                    UserRegLogin.remove()
+                        Roll: RollDatalist.value
+                    }).then(
+                        set(ref(db, 'Rolls/' + `/${RollDatalist.value}/` + user.uid),{
+                            user_email: Email.value
+                    })).then(
+                        alert("Register Succesful")                //turn off when done
+                    ) 
                 })
                 .catch((error) => {
                     //const errorCode = error.code;
                     //const errorMessage = error.message;
                     console.log(error.message);                      //turn off when done
-                    console.log(error.code);
-                    TextError.textContent = UserErrorChecker(error.code)
+                    //console.log(error.code);
+                    //TextError.textContent = UserErrorChecker(error.code)
                 });
             }
             else{
@@ -103,9 +91,8 @@ const UserStart = () => { // works, needs css/bootstrap
         }
     }
 
-    LoginBTN.addEventListener("click", UserLogin)
     RegBTN.addEventListener("click", UserRegister)
 
 }
 
-export { UserStart }
+export { SYSUserStart }

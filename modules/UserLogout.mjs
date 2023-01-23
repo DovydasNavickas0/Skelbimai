@@ -1,6 +1,6 @@
-import { firebaseConfig } from "./database.mjs"
 import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 
+// need to make it so when logging out it clears the screen
 
 const auth = getAuth();
 
@@ -26,11 +26,12 @@ const UserLogout = () => {
         signOut(auth).then(() => {
             console.log("Logout successful");
             signout.remove()
+            document.getElementById('mainPage').remove()
         })
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            alert(error.message)
+            //alert(error.message)
         })
     
     }

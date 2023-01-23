@@ -3,6 +3,8 @@ import { firebaseConfig } from "./database.mjs"
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 import {getDatabase, ref, get, push, remove} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 
+// category creation and deletion works needs bootstrap
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getDatabase();
@@ -13,6 +15,7 @@ const categorypage = () => {
 
     const cat = document.createElement('div')
     const root = document.getElementById('root')
+    cat.setAttribute('id', 'mainPage')
 
 
     //create
@@ -100,18 +103,18 @@ const categorypage = () => {
 
     const deleteCategory = (x) => {
 
-        console.log('function1')
+        //console.log('function1')
 
         get(ref(db, 'categories/')).then((snapshot) => {
 
-            console.log('stuff1')
+            //console.log('stuff1')
             for(let i in snapshot.val()){
 
-                console.log('stuff2' + i)
+                //console.log('stuff2' + i)
 
                 if( snapshot.val()[i].Name === x){
 
-                    console.log('stuff3')
+                    //console.log('stuff3')
                     
                     remove(ref(db, 'categories/' + i))
                     .then(() => {

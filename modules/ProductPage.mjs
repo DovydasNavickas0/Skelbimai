@@ -4,6 +4,12 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebas
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 import {getDatabase, ref, get, set, child, update, remove, push} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 
+//Insert works
+//Delete works
+//Edit works
+//Product table works
+//Needs a makeup
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getDatabase();
@@ -11,10 +17,14 @@ const db = getDatabase();
 const ProductPage = () => {
 
     const ProductPage = document.createElement('div')
+    ProductPage.setAttribute('id', 'mainPage')
 
     const divextra1 = document.createElement('div')
 
     const divextra2 = document.createElement('div')
+
+    const textinfo = document.createElement('p')
+
 
     //Names
     const divName = document.createElement('div')
@@ -73,6 +83,8 @@ const ProductPage = () => {
     const updaterbtn = document.createElement('button')
     updaterbtn.innerText = "Update"
 
+    updaterbtn.style.visibility = "hidden"
+
     //const deletebtn = document.createElement('button')
     //deletebtn.innerText = "Products image"
 
@@ -83,6 +95,7 @@ const ProductPage = () => {
     root.appendChild(ProductPage)
 
     ProductPage.appendChild(divextra1)
+    divextra1.appendChild(textinfo)
     divextra1.appendChild(divextra2)
 
     divextra2.appendChild(divName)
@@ -159,6 +172,43 @@ const ProductPage = () => {
         .catch((error) => {
             console.log(error.message);   
         })
+    }
+
+    const ProductEdit = (x) => {
+
+        insertbtn.disabled = true;
+
+        updaterbtn.style.visibility = "visible"
+
+        get(ref(db, 'Products/' + x))
+            .then((snapshot) => {
+                textinfo.innerText = `${snapshot.val().Name} has been selected to edit`
+                inputName.value = snapshot.val().Name
+                selectCategory.valuet = snapshot.val().Category
+                inputPrice.value = snapshot.val().Price
+                inputDescription.value = snapshot.val().Description
+                inputImg.value = snapshot.val().ImgLink
+            })
+
+        const updater = (i) => {
+            update(ref(db, "/Products/" + i), {
+                Name: inputName.value,                  
+                Category: selectCategory.value,
+                Price: inputPrice.value,
+                Description: inputDescription.value,
+                ImgLink: inputImg.value 
+            })
+                .then(() => {
+                    alert("Data has been update successfull")
+                    updaterbtn.style.visibility = "hidden"
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+        }
+
+        updaterbtn.addEventListener("click", function(){updater(x)})
+
     }
 
     (function DisplayData(){
@@ -265,15 +315,17 @@ const ProductPage = () => {
                             rowproduct.appendChild(colimage);
                             tbody.appendChild(rowproduct)
                             rowproduct.appendChild(deletebtn)
+                            rowproduct.appendChild(editbtn)
 
                             deletebtn.addEventListener('click', function() {ProductsDeletion(ID)})
+                            editbtn.addEventListener('click', function(){ProductEdit(ID)})
                         }
                     }
                 }
 
             })
             .catch((error) => {
-                console.log(error.message);
+                console.log(error);
             })
 
     })()

@@ -4,8 +4,10 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
 import { getDatabase } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 import { UserStart } from "./modules/UserStart.mjs";
 import { UserLogout } from "./modules/UserLogout.mjs";
-import { categorypage } from "./modules/Categories.mjs";
-import { ProductPage } from "./modules/ProductPage.mjs";
+//import { categorypage } from "./modules/Categories.mjs";
+//import { ProductPage } from "./modules/ProductPage.mjs";
+//import { SYSUserStart } from "./modules/SYSad/SYSUserStart.mjs";
+import { RollChecker } from "./modules/Rolls.mjs";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
@@ -16,7 +18,7 @@ onAuthStateChanged(auth, (user) => {
         const uid = user.uid;
         console.log("User is active");
         UserLogout()
-        categorypage()
+        RollChecker(uid)
     }
     else{
         console.log("User is inactive");
@@ -29,3 +31,6 @@ onAuthStateChanged(auth, (user) => {
 //Admin login
 // johndoe@skb.lt
 // 12345678lt
+//User login
+// test@dn.lt
+// 123456lt
