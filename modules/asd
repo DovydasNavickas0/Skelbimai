@@ -1,0 +1,73 @@
+const rowproduct = document.createElement('tr');
+        
+                                    const colname = document.createElement('td');
+                                    colname.textContent = snapshot.val()[ID].Name;
+        
+                                    const colbtn = document.createElement('td')
+        
+                                    const colcategory = document.createElement('td');
+                                    colcategory.textContent = snapshot.val()[ID].Category;
+        
+        
+                                    const colprice = document.createElement('td');
+                                    colprice.textContent = snapshot.val()[ID].Price;
+        
+        
+                                    const ColDesc = document.createElement('td');
+                                    ColDesc.textContent = snapshot.val()[ID].Description;
+        
+        
+                                    const colimage = document.createElement('td');
+                                    const imgsrc = document.createElement('img');
+                                    imgsrc.src = snapshot.val()[ID].ImgLink;
+                                    imgsrc.classList.add("img-fluid");
+        
+        
+                                    const favbtn = document.createElement('button')
+                                    favbtn.classList.add("btn", "btn-outline-dark")
+                                    const favI = document.createElement('i')
+                                    favI.setAttribute('id', `fav ${ID}`)
+        
+                                    const fav = () => {
+                                    
+                                        let s = 0
+            
+                                        get(ref(db, 'Favorites/' + user.uid)).then((snapshot) => {
+                                            //console.log('get favorite active')
+                                            for(let i in snapshot.val()){
+                                                //console.log(snapshot.val()[i].Product_ID)
+                                                if(snapshot.val()[i].Product_ID === ID){
+                                                    s -= 1000
+                                                }
+                                                else{
+                                                    s += 1
+                                                }
+                                                //console.log(s)
+                                            }
+                                        }).then(
+                                            setTimeout(() => {
+                                                if(s>=0){
+                                                    favI.classList.add("bi-star")
+                                                }
+                                                else{
+                                                    favI.classList.add('bi-star-fill')
+                                                }
+                                            },50)
+                                        )
+                
+                                    }
+                                    fav()
+                                    
+                                    tbody.appendChild(rowproduct)
+                                    colimage.appendChild(imgsrc);
+                                    rowproduct.appendChild(colbtn)
+                                    rowproduct.appendChild(colname);
+                                    rowproduct.appendChild(colcategory);
+                                    rowproduct.appendChild(colprice);
+                                    rowproduct.appendChild(ColDesc);
+                                    rowproduct.appendChild(colimage);
+                                    colbtn.appendChild(favbtn)
+                                    favbtn.appendChild(favI)
+            
+                                    favbtn.addEventListener('click', function(){FavouriteDB(ID)})
+                                

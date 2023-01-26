@@ -16,33 +16,50 @@ const db = getDatabase();
 
 const ProductPage = () => {
 
-    const ProductPage = document.createElement('div')
-    ProductPage.setAttribute('id', 'mainPage')
+    const ProductPage = document.createElement('div');
+    ProductPage.setAttribute('id', 'mainPage');
 
-    const divextra1 = document.createElement('div')
+    const divextra1 = document.createElement('div');
+    divextra1.classList.add("row", "pt-2");
 
-    const divextra2 = document.createElement('div')
+    const divextra2 = document.createElement('div');
+    divextra2.classList.add("row", "col-sm-12", "col-md-5", "mx-5", "p-3");
 
-    const textinfo = document.createElement('p')
+    const divextra5 = document.createElement('div');
+    divextra5.classList.add("px-3", "offset-8");
+
+    //errors
+    const errorDiv = document.createElement('div');
+    errorDiv.classList.add("row", "col-md-6", "offset-md-3", "text-center", "p-0", "mb-5", "bg-gradient"); //"bg-secondary",
+    errorDiv.setAttribute('style', '--bs-bg-opacity: .45;');
+    const errorP = document.createElement('p');
 
 
     //Names
-    const divName = document.createElement('div')
-    const labelName = document.createElement('label')
-    labelName.innerText = "Products Name"
-    const inputName = document.createElement('input')
-    labelName.setAttribute('type', 'text')
-    labelName.setAttribute('placeholder', 'Enter the name')
+    const divName = document.createElement('div');
+    divName.classList.add("mb-3");
+    const labelName = document.createElement('label');
+    labelName.innerText = "Products Name";
+    labelName.classList.add("form-label")
+    const inputName = document.createElement('input');
+    inputName.classList.add("form-control")
+    labelName.setAttribute('type', 'text');
+    labelName.setAttribute('placeholder', 'Enter the name');
+
 
     //Categories
     const divCategory = document.createElement('div')
+    divCategory.classList.add("mb-3")
     const labelCategory = document.createElement('label')
     labelCategory.innerText = "Products category"
+    labelCategory.classList.add("form-label")
     const selectCategory = document.createElement('select')
+    selectCategory.classList.add("form-select")
     const selectempty = document.createElement('option')
     selectempty.innerText = '            '
     selectCategory.appendChild(selectempty)
     
+
     //Categories datalist options
     get(ref(db, 'categories/')).then((snapshot) => {
         for(let i in snapshot.val()){
@@ -53,57 +70,69 @@ const ProductPage = () => {
         }
     })
 
+
     //Prices
     const divPrice = document.createElement('div')
+    divPrice.classList.add("mb-3")
     const labelPrice = document.createElement('label')
     labelPrice.innerText = "Products Price"
+    labelPrice.classList.add("form-label")
     const inputPrice = document.createElement('input')
+    inputPrice.classList.add("form-control")
     labelName.setAttribute('type', 'number')
     labelName.setAttribute('placeholder', 'Enter the price')
 
+
     //Description
     const divDescription = document.createElement('div')
+    divDescription.classList.add("mb-3")
     const labelDescription = document.createElement('label')
     labelDescription.innerText = "Products Description"
+    labelDescription.classList.add("form-label")
     const inputDescription = document.createElement('textarea')
+    inputDescription.classList.add("form-control")
     labelName.setAttribute('rows', '3')
+
 
     //Img
     const divImg = document.createElement('div')
+    divImg.classList.add("mb-3")
     const labelImg = document.createElement('label')
     labelImg.innerText = "Products image"
+    labelImg.classList.add("form-label")
     const inputImg = document.createElement('input')
+    inputImg.classList.add("form-control")
     labelName.setAttribute('type', 'text')
     labelName.setAttribute('placeholder', 'Add a Image')
 
+
     //The buttons
     const divBtn = document.createElement('div')
+    divBtn.classList.add("mb-3", "justify-content-around", "align-items-center", "d-grid", "gap-2", "mx-auto")
     const insertbtn = document.createElement('button')
     insertbtn.innerText = "Insert"
+    insertbtn.classList.add("btn", "btn-outline-dark")
     const updaterbtn = document.createElement('button')
     updaterbtn.innerText = "Update"
-
+    updaterbtn.classList.add("btn", "btn-outline-dark")
     updaterbtn.style.visibility = "hidden"
 
-    //const deletebtn = document.createElement('button')
-    //deletebtn.innerText = "Products image"
-
     const root = document.getElementById('root')
-    const TextError = document.createElement('p')
 
-    root.appendChild(TextError)
     root.appendChild(ProductPage)
 
     ProductPage.appendChild(divextra1)
-    divextra1.appendChild(textinfo)
+    divextra1.appendChild(errorDiv)
+    errorDiv.appendChild(errorP)
     divextra1.appendChild(divextra2)
+    divextra2.appendChild(divextra5)
 
-    divextra2.appendChild(divName)
-    divextra2.appendChild(divCategory)
-    divextra2.appendChild(divPrice)
-    divextra2.appendChild(divDescription)
-    divextra2.appendChild(divImg)
-    divextra2.appendChild(divBtn)
+    divextra5.appendChild(divName)
+    divextra5.appendChild(divCategory)
+    divextra5.appendChild(divPrice)
+    divextra5.appendChild(divDescription)
+    divextra5.appendChild(divImg)
+    divextra5.appendChild(divBtn)
 
     divName.appendChild(labelName)
     divName.appendChild(inputName)
@@ -156,9 +185,12 @@ const ProductPage = () => {
         })
         .then(() => {
             alert("Data added succesfullty");
+            window.location.reload();
         })
         .catch((error) => {
-            console.log(error.message);          
+            errorP.innerText = "something has gone wrong. Please try later"
+            errorDiv.classList.add("bg-warning")
+            console.log(error);         
         })
     }
 
@@ -168,9 +200,11 @@ const ProductPage = () => {
         remove(ref(db, "Products/" + x))
         .then(() => {
             alert("Data has been successfully deleted");
+            window.location.reload();
         })
         .catch((error) => {
-            console.log(error.message);   
+            errorP.innerText = "something has gone wrong. Please try later"
+            console.log(error);   
         })
     }
 
@@ -179,12 +213,16 @@ const ProductPage = () => {
         insertbtn.disabled = true;
 
         updaterbtn.style.visibility = "visible"
+        
+        document.documentElement.scrollTop = 0;
+
+        errorDiv.classList.add("bg-secondary")
 
         get(ref(db, 'Products/' + x))
             .then((snapshot) => {
-                textinfo.innerText = `${snapshot.val().Name} has been selected to edit`
+                errorP.innerText = `${snapshot.val().Name} has been selected to edit`
                 inputName.value = snapshot.val().Name
-                selectCategory.valuet = snapshot.val().Category
+                selectCategory.value = snapshot.val().Category
                 inputPrice.value = snapshot.val().Price
                 inputDescription.value = snapshot.val().Description
                 inputImg.value = snapshot.val().ImgLink
@@ -201,9 +239,12 @@ const ProductPage = () => {
                 .then(() => {
                     alert("Data has been update successfull")
                     updaterbtn.style.visibility = "hidden"
+                    window.location.reload();
                 })
                 .catch((error) => {
-                    console.log(error)
+                    errorP.innerText = "something has gone wrong. Please try later"
+                    errorDiv.classList.add("bg-warning")
+                    console.log(error);  
                 })
         }
 
@@ -215,46 +256,51 @@ const ProductPage = () => {
         //console.log(findID.value);
 
         const divextra3 = document.createElement('div')
+        divextra3.classList.add("row", "col-sm-12", "col-md-12", "pt-5", "mt-5", "p-3")
+
         const divextra4 = document.createElement('div')
+        divextra4.classList.add("mt-5")
     
         const Displaytable = document.createElement('table');
-        //Displaytable.classList.add('table')
-        //Displaytable.setAttribute('style', 'width:35%')
+        Displaytable.classList.add("table", "table-striped", "table-bordered", "m-3")
 
         const thead = document.createElement('thead')
         const tbody = document.createElement('tbody')
 
         const rowheader = document.createElement('tr');
-        rowheader.style.border = "medium solid #000000";
+
+        const listBtn = document.createElement('th')
+        listBtn.classList.add("col-md-1")
         
         const listName = document.createElement('th');
         listName.innerText = "Name";
-        listName.style.border = "thin solid #000000";
+        listName.classList.add("col-md-2")
 
         const listCategory = document.createElement('th');
         listCategory.innerText = "Category";
-        listCategory.style.border = "thin solid #000000";
+        listCategory.classList.add("col-md-2")
     
         const listPrice = document.createElement('th');
         listPrice.innerText = "Price";
-        listPrice.style.border = "thin solid #000000";
+        listPrice.classList.add("col-md-1")
     
         const listDescription = document.createElement('th');
         listDescription.innerText = "Description";
-        listDescription.style.border = "thin solid #000000";
+        listDescription.classList.add("col-md-3")
     
         const listImg = document.createElement('th');
         listImg.innerText = "Image";
-        listImg.style.border = "thin solid #000000";
+        listImg.classList.add("col-md-3")
     
-        ProductPage.appendChild(divextra3)
-        divextra3.appendChild(divextra4)
+        ProductPage.appendChild(divextra3);
+        divextra3.appendChild(divextra4);
         divextra4.appendChild(Displaytable);
         Displaytable.appendChild(thead);
-        Displaytable.appendChild(tbody)
-        thead.appendChild(rowheader)
+        Displaytable.appendChild(tbody);
+        thead.appendChild(rowheader);
+        rowheader.appendChild(listBtn);
         rowheader.appendChild(listName);
-        rowheader.appendChild(listCategory)
+        rowheader.appendChild(listCategory);
         rowheader.appendChild(listPrice);
         rowheader.appendChild(listDescription);
         rowheader.appendChild(listImg);
@@ -276,46 +322,50 @@ const ProductPage = () => {
     
                         if(snapshot.val()[ID].User === user.uid){
                             const rowproduct = document.createElement('tr');
-                            rowproduct.style.border = "medium solid #000000";
+
+                            const colbtn = document.createElement('td');
+                            //colbtn.classList.add()
+                            colbtn.setAttribute('align', 'center')
     
                             const colname = document.createElement('td');
                             colname.textContent = snapshot.val()[ID].Name;
-                            colname.style.border = "thin solid #000000";
 
                             const colcategory = document.createElement('td');
                             colcategory.textContent = snapshot.val()[ID].Category;
-                            colcategory.style.border = "thin solid #000000";
     
                             const colprice = document.createElement('td');
                             colprice.textContent = snapshot.val()[ID].Price;
-                            colprice.style.border = "thin solid #000000";
     
                             const ColDesc = document.createElement('td');
                             ColDesc.textContent = snapshot.val()[ID].Description;
-                            ColDesc.style.border = "thin solid #000000";
     
                             const colimage = document.createElement('td');
                             const imgsrc = document.createElement('img');
                             imgsrc.src = snapshot.val()[ID].ImgLink;
-                            imgsrc.classList.add("img-fluid");
-                            //imgsrc.setAttribute('width', '500');
-                            //imgsrc.setAttribute('height', '600');
-                            colimage.style.border = "thin solid #000000";
+                            imgsrc.classList.add("w-100");
 
                             const editbtn = document.createElement('button')
-                            editbtn.innerText = "Edit"
+                            editbtn.classList.add("col-md-6", "p-3", "btn", "btn-outline-dark")
+                            const iPencil = document.createElement('i')
+                            iPencil.classList.add("bi", "bi-pencil")
+                            editbtn.appendChild(iPencil)
+
                             const deletebtn = document.createElement('button')
-                            deletebtn.innerText = "Delete"
+                            const iTrash = document.createElement('i')
+                            iTrash.classList.add("bi", "bi-trash3")
+                            deletebtn.appendChild(iTrash)
+                            deletebtn.classList.add("col-md-6", "p-3", "btn", "btn-outline-dark", "mb-5", "mt-5", "d-grid", "gap-5")
     
                             colimage.appendChild(imgsrc);
+                            rowproduct.appendChild(colbtn)
+                            colbtn.appendChild(deletebtn)
+                            colbtn.appendChild(editbtn)
                             rowproduct.appendChild(colname);
                             rowproduct.appendChild(colcategory);
                             rowproduct.appendChild(colprice);
                             rowproduct.appendChild(ColDesc);
                             rowproduct.appendChild(colimage);
                             tbody.appendChild(rowproduct)
-                            rowproduct.appendChild(deletebtn)
-                            rowproduct.appendChild(editbtn)
 
                             deletebtn.addEventListener('click', function() {ProductsDeletion(ID)})
                             editbtn.addEventListener('click', function(){ProductEdit(ID)})
@@ -325,11 +375,12 @@ const ProductPage = () => {
 
             })
             .catch((error) => {
-                console.log(error);
+                errorP.innerText = "something has gone wrong. Please try later"
+                errorDiv.classList.add("bg-warning")
+                console.log(error);  
             })
 
     })()
-
 
     insertbtn.addEventListener('click', insertProduct)
     

@@ -8,7 +8,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getDatabase();
 
-const ProductAds = () => {
+const FavoritedPage = () => {
 
     const user = auth.currentUser
 
@@ -36,11 +36,11 @@ const ProductAds = () => {
 
     const listName = document.createElement('th');
     listName.innerText = "Name";
-    listName.classList.add("col-md-1")
+    listName.classList.add("col-md-2")
 
     const listCategory = document.createElement('th');
     listCategory.innerText = "Category";
-    listCategory.classList.add("col-md-1")
+    listCategory.classList.add("col-md-2")
     
     const listPrice = document.createElement('th');
     listPrice.innerText = "Price";
@@ -48,11 +48,11 @@ const ProductAds = () => {
     
     const listDescription = document.createElement('th');
     listDescription.innerText = "Description";
-    listDescription.classList.add("col-md-2")
+    listDescription.classList.add("col-md-3")
     
     const listImg = document.createElement('th');
     listImg.innerText = "Image";
-    listImg.classList.add("col-md-2")
+    listImg.classList.add("col-md-3")
     
     root.appendChild(AdsPage)
     AdsPage.appendChild(divextra3)
@@ -123,95 +123,64 @@ const ProductAds = () => {
 
     //The table creater
         get(ref(db, 'Products/'))
-            .then((snapshot) => {
-                if(snapshot.exists()) {
-                    for(let ID in snapshot.val()){
-
-                        if(snapshot.val()[ID].User === user.uid){
-                            continue
-                        }
-                        else{
-                            const rowproduct = document.createElement('tr');
-
-                            const colname = document.createElement('td');
-                            colname.textContent = snapshot.val()[ID].Name;
-
-                            const colbtn = document.createElement('td')
-
-                            const colcategory = document.createElement('td');
-                            colcategory.textContent = snapshot.val()[ID].Category;
-
-
-                            const colprice = document.createElement('td');
-                            colprice.textContent = snapshot.val()[ID].Price;
-
-
-                            const ColDesc = document.createElement('td');
-                            ColDesc.textContent = snapshot.val()[ID].Description;
-
-
-                            const colimage = document.createElement('td');
-                            const imgsrc = document.createElement('img');
-                            imgsrc.src = snapshot.val()[ID].ImgLink;
-                            imgsrc.classList.add("w-100");
-
-
-                            const favbtn = document.createElement('button')
-                            favbtn.classList.add("btn", "btn-outline-dark")
-                            const favI = document.createElement('i')
-                            favI.setAttribute('id', `fav ${ID}`)
-
-                            const fav = () => {
+            .then((snapshotProduct) => {
+                if(snapshotProduct.exists()) {
+                    for(let ProdID in snapshotProduct.val()){
+                        if(snapshotProduct.val()[ProdID].User === user.uid){
                             
-                                let s = 0
-    
-                                get(ref(db, 'Favorites/' + user.uid)).then((snapshot) => {
-                                    //console.log('get favorite active')
-                                    for(let i in snapshot.val()){
-                                        //console.log(snapshot.val()[i].Product_ID)
-                                        if(snapshot.val()[i].Product_ID === ID){
-                                            s -= 1000
+                            get(ref(db, "Favorites/" + user.uid)).then((snapshotFavorites) =>{
+                                if(snapshotFavorites.exists()){
+                                    for(let FavID in snapshotFavorites.val()){
+                                        console.log(snapshotFavorites.val()[FavID].Product_ID)
+                                        if(ProdID === snapshotFavorites.val()[FavID].Product_ID){
+                                            console.log(FavID)
                                         }
                                         else{
-                                            s += 1
+                                            continue
                                         }
-                                        //console.log(s)
                                     }
-                                }).then(
-                                    setTimeout(() => {
-                                        if(s>=0){
-                                            favI.classList.add("bi-star")
-                                        }
-                                        else{
-                                            favI.classList.add('bi-star-fill')
-                                        }
-                                    },50)
-                                )
-        
-                            }
-                            fav()
-                            
-                            tbody.appendChild(rowproduct)
-                            colimage.appendChild(imgsrc);
-                            rowproduct.appendChild(colbtn)
-                            rowproduct.appendChild(colname);
-                            rowproduct.appendChild(colcategory);
-                            rowproduct.appendChild(colprice);
-                            rowproduct.appendChild(ColDesc);
-                            rowproduct.appendChild(colimage);
-                            colbtn.appendChild(favbtn)
-                            favbtn.appendChild(favI)
-    
-                            favbtn.addEventListener('click', function(){FavouriteDB(ID)})
+                                }
+                            })
                         }
                     }
-                }
 
+                }
             })
-            .catch((error) => {
-                console.log(error);
-            })
+
+
+
+
+                        //if(snapshotFavorites.exists()){
+                            //console.log("works3")
+                            //for(let ProdID in snapshotProduct.val()){
+
+                                    //console.log("works3")
+                                    //for(let FavID in snapshotFavorites.val()){
+                                        //if(snapshotFavorites.val()[FavID].Product_ID === ProdID){
+                                            //console.log(FavID)
+                                            //console.log("works4")
+                                        //}
+                                        //else{
+                                            //console.log("broke4")
+                                        //}
+                                    //}
+                                //}
+                                //console.log("broke3")
+                            //}
+                        //}
+                        //else{
+                            //console.log("broke2")
+                        //}
+                        //get(ref(db, 'Favorites/' + user.uid)).then((snapshotFavorites) => {})
+                //}
+                //else{
+                    //console.log("broke1")
+                //}
+            //})
+            //.catch((error) => {
+                //console.log(error);
+            //})
 
 }
 
-export { ProductAds }
+export { FavoritedPage }
