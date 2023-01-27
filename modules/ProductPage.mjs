@@ -8,7 +8,7 @@ import {getDatabase, ref, get, set, child, update, remove, push} from "https://w
 //Delete works
 //Edit works
 //Product table works
-//Needs a makeup
+//Looks good
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
@@ -175,13 +175,16 @@ const ProductPage = () => {
             return
         }
 
+        const loginTime = new Date()
+
         push(ref(db, 'Products/'), {
             User: user.uid,
             Name: inputName.value,                  
             Category: selectCategory.value,
             Price: inputPrice.value,
             Description: inputDescription.value,
-            ImgLink: inputImg.value 
+            ImgLink: inputImg.value,
+            CreationDate: `${loginTime}`
         })
         .then(() => {
             alert("Data added succesfullty");
@@ -218,6 +221,8 @@ const ProductPage = () => {
 
         errorDiv.classList.add("bg-secondary")
 
+        const loginTime = new Date()
+
         get(ref(db, 'Products/' + x))
             .then((snapshot) => {
                 errorP.innerText = `${snapshot.val().Name} has been selected to edit`
@@ -234,7 +239,8 @@ const ProductPage = () => {
                 Category: selectCategory.value,
                 Price: inputPrice.value,
                 Description: inputDescription.value,
-                ImgLink: inputImg.value 
+                ImgLink: inputImg.value,
+                CreationDate: `${loginTime}`
             })
                 .then(() => {
                     alert("Data has been update successfull")

@@ -3,6 +3,7 @@ import { firebaseConfig } from "./database.mjs";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 import {getDatabase, ref, get, set, child, update, remove, push} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+import { IndividualProductPage } from "./IndividualProdPage.mjs";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
@@ -41,6 +42,10 @@ const ProductAds = () => {
     const listCategory = document.createElement('th');
     listCategory.innerText = "Category";
     listCategory.classList.add("col-md-1")
+
+    const listDate = document.createElement('th');
+    listDate.innerText = "Creation Date"
+    listDate.classList.add("col-md-1")
     
     const listPrice = document.createElement('th');
     listPrice.innerText = "Price";
@@ -63,7 +68,8 @@ const ProductAds = () => {
     thead.appendChild(rowheader);
     rowheader.appendChild(listBtn)
     rowheader.appendChild(listName);
-    rowheader.appendChild(listCategory)
+    rowheader.appendChild(listCategory);
+    rowheader.appendChild(listDate);
     rowheader.appendChild(listPrice);
     rowheader.appendChild(listDescription);
     rowheader.appendChild(listImg);
@@ -137,9 +143,14 @@ const ProductAds = () => {
                             colname.textContent = snapshot.val()[ID].Name;
 
                             const colbtn = document.createElement('td')
+                            colbtn.setAttribute('align', 'center')
 
                             const colcategory = document.createElement('td');
                             colcategory.textContent = snapshot.val()[ID].Category;
+
+
+                            const coldate = document.createElement('td');
+                            coldate.textContent = snapshot.val()[ID].CreationDate
 
 
                             const colprice = document.createElement('td');
@@ -157,9 +168,16 @@ const ProductAds = () => {
 
 
                             const favbtn = document.createElement('button')
-                            favbtn.classList.add("btn", "btn-outline-dark")
+                            favbtn.classList.add("col-md-4", "p-3", "btn", "btn-outline-dark", "mb-5", "mt-5", "d-grid", "gap-5")
                             const favI = document.createElement('i')
                             favI.setAttribute('id', `fav ${ID}`)
+
+
+                            const Commentbtn = document.createElement("button")
+                            Commentbtn.classList.add("col-md-4", "p-3", "btn", "btn-outline-dark")
+                            const CommentI = document.createElement('i')
+                            CommentI.classList.add("bi", "bi-chat-right-text")
+
 
                             const fav = () => {
                             
@@ -167,8 +185,10 @@ const ProductAds = () => {
     
                                 get(ref(db, 'Favorites/' + user.uid)).then((snapshot) => {
                                     //console.log('get favorite active')
+
                                     for(let i in snapshot.val()){
                                         //console.log(snapshot.val()[i].Product_ID)
+
                                         if(snapshot.val()[i].Product_ID === ID){
                                             s -= 1000
                                         }
@@ -191,26 +211,32 @@ const ProductAds = () => {
                             }
                             fav()
                             
-                            tbody.appendChild(rowproduct)
+                            tbody.appendChild(rowproduct);
                             colimage.appendChild(imgsrc);
-                            rowproduct.appendChild(colbtn)
+                            rowproduct.appendChild(colbtn);
                             rowproduct.appendChild(colname);
                             rowproduct.appendChild(colcategory);
+                            rowproduct.appendChild(coldate);
                             rowproduct.appendChild(colprice);
                             rowproduct.appendChild(ColDesc);
                             rowproduct.appendChild(colimage);
-                            colbtn.appendChild(favbtn)
-                            favbtn.appendChild(favI)
+                            colbtn.appendChild(favbtn);
+                            colbtn.appendChild(Commentbtn)
+                            favbtn.appendChild(favI);
+                            Commentbtn.appendChild(CommentI)
     
                             favbtn.addEventListener('click', function(){FavouriteDB(ID)})
+                            Commentbtn.addEventListener('click', function(){
+                                document.getElementById('mainPage').remove()
+                                IndividualProductPage(ID)})
                         }
                     }
                 }
 
             })
-            .catch((error) => {
-                console.log(error);
-            })
+            //.catch((error) => {
+            //    console.log(error);
+            //})
 
 }
 

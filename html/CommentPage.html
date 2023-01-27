@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"defer></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav id="header" class="row container-fluid p-0, m-0 pb-5">
+        <h1 class="col-md-2 mt-1">Skelbimai</h1>
+        <div class="col-md-9 mx-0 p-0 m-3 align-items-center">
+            <button class="btn btn-outline-dark col-md-3 offset-md-1">Home</button>
+            <button class="btn btn-outline-dark col-md-3">Favorited</button>
+            <button class="btn btn-outline-dark col-md-3">My posts</button>
+        </div>
+        <div class="col-md-1 mx-0 p-0 m-3 d-flex justify-content-around">
+            <button class="p-1 btn btn-outline-dark ps-2 pe-2">
+                <li class="bi-person-dash-fill list-unstyled"></li>
+            </button>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row col-md-6 offset-3 text-center p-1 mb-2 bg-success bg-gradient" style="--bs-bg-opacity: .75;"> <!-- .bg-danger for errors -->
+            <p>Error / info goes here</p>
+        </div>
+        <div class="row pt-5">
+            <div class="row col-sm-12 col-md-5 mx-5 p-3">
+                <form class="px-3 offset-8">
+                    <div class="mb-3">
+                        <label for="enterName" class="form-label">Product Name</label>
+                        <input type="text" class="form-control" id="enterName">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Product categories</label>
+                        <select class="form-select">
+                            <option selected>                    </option>
+                            <option>computer</option>
+                            <option>fish</option>
+                            <option>car</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="enterQuantity" class="form-label">Product Quantity</label>
+                        <input type="number" class="form-control" id="enterQuantity">
+                    </div>
+                    <div class="mb-3">
+                        <label for="enterPrice" class="form-label">Product Price</label>
+                        <input type="number" class="form-control" id="enterPrice">
+                    </div>
+                    <div class="mb-3">
+                        <label for="enterDescription" class="form-label">Product Descripttion</label>
+                        <textarea name="description"  class="form-control" id="enterDescription" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="enterImgLink" class="form-label text-secondary">Product Img Link</label>
+                        <input type="text" class="form-control" id="enterImgLink">
+                    </div>
+                    <div class="mb-3 justify-content-around align-items-center d-grid gap-2 mx-auto">
+                        <button type="submit" class="btn btn-outline-dark" id="insert">Insert</button>
+                        <button type="submit" class="btn btn-outline-dark visually-hidden" id="update">Update</button>
+                    </div>
+
+                </form>
+            </div>
+            <div class="row col-sm-12 col-md-12 pt-5 mt-5 p-3">
+                <div class="mt-5">
+                    <table class="table table-striped table-bordered m-3">
+                        <thead>
+                            <tr>
+                                <th class="col-md-1"></th>
+                                <th class="col-md-2">Name</th>
+                                <th class="col-md-2">Category</th>
+                                <th class="col-md-1">Price</th>
+                                <th class="col-md-3">Description</th>
+                                <th class="col-md-3">Image</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td align="center">
+                                    <button class="col-md-6 p-3 btn btn-outline-dark"><i class="bi bi-trash3"></i></button>
+                                    <button class="col-md-6 p-3 btn btn-outline-dark"><i class="bi bi-pencil"></i></button>
+                                </td>
+                                <td>Ford</td>
+                                <td>cars</td>
+                                <td>4000</td>
+                                <td>It's a car.</td>
+                                <td>
+                                    <img class="w-100" src="https://images.pexels.com/photos/1007410/pexels-photo-1007410.jpeg?auto=compress&cs=tinysrgb&w=300"></img>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td align="center">
+                                    <button class="col-md-6 p-3 btn btn-outline-dark mb-5 mt-5"><i class="bi bi-trash3"></i></button>
+                                    <button class="col-md-6 p-3 btn btn-outline-dark"><i class="bi bi-pencil"></i></button>
+                                </td>
+                                <td>Fishy</td>
+                                <td>fish</td>
+                                <td>20</td>
+                                <td>He's Fishy</td>
+                                <td>
+                                    <img class="w-100" src="https://images.pexels.com/photos/128756/pexels-photo-128756.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"></img>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script src="./script.js"></script>
+</body>
+</html>

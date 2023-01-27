@@ -27,13 +27,13 @@ const UserLogout = () => {
         signOut(auth).then(() => {
             console.log("Logout successful");
             signout.remove()
-            document.getElementById('mainPage').remove()
-            document.getElementById('navbtn1').remove()
-            document.getElementById('navbtn2').remove()
-            document.getElementById('navbtn3').remove()
-            document.getElementById('navbtn4').remove()
-            document.getElementById('navbtn5').remove()
-            document.getElementById('navbtn6').remove()
+            document.getElementById('mainPage').remove();
+            document.getElementById('navbtn1').remove();
+            document.getElementById('navbtn2').remove();
+            document.getElementById('navbtn3').remove();
+            document.getElementById('navbtn4').remove();
+            document.getElementById('navbtn5').remove();
+            document.getElementById('navbtn6').remove();
         })
         .catch((error) => {
             const errorCode = error.code;
