@@ -1,6 +1,6 @@
 [+]-Create examples of the pages in html.
 [+]-Redesign the code to look like the design.
-[-]-Add comments to ads. Better to make it so you have to click on the ad before you get.(Do it after the bootstrap part is done for less headaches).
+[+]-Add comments to ads. Better to make it so you have to click on the ad before you get.(Do it after the bootstrap part is done for less headaches).
 [+]-Create a nav for the Admin.
 [+]-Create a nav for the User.
 [+]-Finish the error text boxes.

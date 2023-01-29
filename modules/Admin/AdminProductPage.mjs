@@ -1,14 +1,15 @@
-import { firebaseConfig } from "./database.mjs";
+import { firebaseConfig } from "../database.mjs";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
-import {getDatabase, ref, get, remove, push} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
-import { IndividualProductPage } from "./IndividualProdPage.mjs";
+import {getDatabase, ref, get, remove} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+import { AdminIndividualProd } from "./AdminIndividualProd.mjs";
+import { AdminProductEdit } from "./AdminProductEdit.mjs";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getDatabase();
 
-const ProductAds = () => {
+const AdminProductPage = () => {
 
     const user = auth.currentUser
 
@@ -74,57 +75,18 @@ const ProductAds = () => {
     rowheader.appendChild(listImg);
 
 
-    const FavouriteDB = (x) => {
+    const ProductsDeletion = (x) => {
 
-        const fav = document.getElementById(`fav ${x}`)
-
-        get(ref(db, 'Products/' + x)).then((snapshotProduct) => {
-
-            if(fav.className == "bi-star"){ // add to favorite
-
-                //console.log('works1')
-
-                push(ref(db, 'Favorites/' + user.uid), {
-                    Product_ID: x,
-                    Product_Name: snapshotProduct.val().Name
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
-                fav.classList.remove("bi-star")
-                fav.classList.add('bi-star-fill')
-            }
-            else if(fav.className == 'bi-star-fill'){ //remove from favorite
-
-                //console.log('works2')
-
-                get(ref(db, 'Favorites/' + user.uid)).then((snapshotFav) => {
-                    for(let i in snapshotFav.val()){
-
-                        //console.log('works3')
-                        //console.log(i)
-
-                        if(snapshotFav.val()[i].Product_ID === x){
-                            remove(ref(db, "Favorites/" + user.uid + `/${i}` )).then(
-                                (function(){
-                                    fav.classList.remove('bi-star-fill');
-                                    fav.classList.add("bi-star");
-                                })()
-                            )
-                        }
-                    }
-                })
-            }
-            else{
-                //console.log("FavouriteDB broke")
-                return
-            }
-
+        remove(ref(db, "Products/" + x))
+        .then(() => {
+            alert("Data has been successfully deleted");
+            window.location.reload();
         })
         .catch((error) => {
-            console.log(error);
+            console.log(error);   
         })
     }
+
 
     //The table creater
         get(ref(db, 'Products/'))
@@ -166,10 +128,18 @@ const ProductAds = () => {
                             imgsrc.classList.add("w-100");
 
 
-                            const favbtn = document.createElement('button')
-                            favbtn.classList.add("col-md-4", "p-3", "btn", "btn-outline-dark", "mb-5", "mt-5", "d-grid", "gap-5")
-                            const favI = document.createElement('i')
-                            favI.setAttribute('id', `fav ${ID}`)
+                            const deletebtn = document.createElement('button')
+                            const iTrash = document.createElement('i')
+                            iTrash.classList.add("bi", "bi-trash3")
+                            deletebtn.appendChild(iTrash)
+                            deletebtn.classList.add("col-md-4", "p-3", "btn", "btn-outline-dark", "mb-2", "mt-5", "d-grid", "gap-0")
+
+
+                            const editbtn = document.createElement('button')
+                            editbtn.classList.add("col-md-4", "p-3", "btn", "btn-outline-dark", "me-2")
+                            const iPencil = document.createElement('i')
+                            iPencil.classList.add("bi", "bi-pencil")
+                            editbtn.appendChild(iPencil)
 
 
                             const Commentbtn = document.createElement("button")
@@ -177,38 +147,6 @@ const ProductAds = () => {
                             const CommentI = document.createElement('i')
                             CommentI.classList.add("bi", "bi-chat-right-text")
 
-
-                            const fav = () => {
-                            
-                                let s = 0
-    
-                                get(ref(db, 'Favorites/' + user.uid)).then((snapshot) => {
-                                    //console.log('get favorite active')
-
-                                    for(let i in snapshot.val()){
-                                        //console.log(snapshot.val()[i].Product_ID)
-
-                                        if(snapshot.val()[i].Product_ID === ID){
-                                            s -= 1000
-                                        }
-                                        else{
-                                            s += 1
-                                        }
-                                        //console.log(s)
-                                    }
-                                }).then(
-                                    setTimeout(() => {
-                                        if(s>=0){
-                                            favI.classList.add("bi-star")
-                                        }
-                                        else{
-                                            favI.classList.add('bi-star-fill')
-                                        }
-                                    },50)
-                                )
-        
-                            }
-                            fav()
                             
                             tbody.appendChild(rowproduct);
                             colimage.appendChild(imgsrc);
@@ -219,24 +157,33 @@ const ProductAds = () => {
                             rowproduct.appendChild(colprice);
                             rowproduct.appendChild(ColDesc);
                             rowproduct.appendChild(colimage);
-                            colbtn.appendChild(favbtn);
-                            colbtn.appendChild(Commentbtn)
-                            favbtn.appendChild(favI);
-                            Commentbtn.appendChild(CommentI)
-    
-                            favbtn.addEventListener('click', function(){FavouriteDB(ID)})
+                            colbtn.appendChild(deletebtn);
+                            colbtn.appendChild(editbtn);
+                            colbtn.appendChild(Commentbtn);
+                            editbtn.appendChild(iPencil);
+                            Commentbtn.appendChild(CommentI);
+                            deletebtn.appendChild(iTrash);
+
+
+                            deletebtn.addEventListener('click', function(){
+                                ProductsDeletion(ID)
+                                window.location.reload();
+                            })
+                            editbtn.addEventListener('click', function(){
+                                document.getElementById('mainPage').remove()
+                                AdminProductEdit(ID)
+                            })
                             Commentbtn.addEventListener('click', function(){
                                 document.getElementById('mainPage').remove()
-                                IndividualProductPage(ID)})
+                                AdminIndividualProd(ID)})
                         }
                     }
                 }
 
             })
-            //.catch((error) => {
-            //    console.log(error);
-            //})
-
+            .catch((error) => {
+                console.log(error);
+            })
 }
 
-export { ProductAds }
+export { AdminProductPage }

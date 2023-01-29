@@ -1,8 +1,7 @@
-import { UserErrorChecker } from "./Errors.mjs";
 import { firebaseConfig } from "./database.mjs";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
-import {getDatabase, ref, get, set, child, update, remove, push} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+import {getDatabase, ref, get, update, remove, push} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 
 //Insert works
 //Delete works

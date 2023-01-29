@@ -3,9 +3,11 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebas
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 import {getDatabase, ref, get} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 
-import { categorypage } from "./Categories.mjs";
-import { ProductPage } from "./ProductPage.mjs";
 //import { SYSUserStart } from "./modules/SYSad/SYSUserStart.mjs";
+import { categorypage } from "./Admin/Categories.mjs";
+import { AdminProductPage } from "./Admin/AdminProductPage.mjs";
+
+import { ProductPage } from "./ProductPage.mjs";
 import { ProductAds } from "./ProductAds.mjs";
 import { FavoritedPage } from "./FavoritedPage.mjs";
 
@@ -38,15 +40,15 @@ const RollChecker = (x) => {
                             //console.log('Roll checker working7')
                             const nav1btn = document.createElement('button')
                             nav1btn.classList.add("btn", "btn-outline-dark", "col-md-3", "offset-md-1")
-                            nav1btn.innerText = 'Categories'
+                            nav1btn.innerText = 'Products'
                             nav1btn.setAttribute('id', 'navbtn1')
                             const nav2btn = document.createElement('button')
                             nav2btn.classList.add("btn", "btn-outline-dark", "col-md-3", "m-1")
-                            nav2btn.innerText = 'Users'
+                            nav2btn.innerText = 'Categories'
                             nav2btn.setAttribute('id', 'navbtn2')
                             const nav3btn = document.createElement('button')
                             nav3btn.classList.add("btn", "btn-outline-dark", "col-md-3")
-                            nav3btn.innerText = 'Products'
+                            nav3btn.innerText = 'Users'
                             nav3btn.setAttribute('id', 'navbtn3')
 
                             nav.appendChild(nav1btn)
@@ -55,9 +57,17 @@ const RollChecker = (x) => {
 
                             nav1btn.addEventListener('click', function(){
                                 document.getElementById('mainPage').remove()
-                                categorypage()})
+                                AdminProductPage()
+                            })
+                            nav2btn.addEventListener('click', function(){
+                                document.getElementById('mainPage').remove()
+                                categorypage()
+                            })
+                            //nav3btn.addEventListener('click', function(){
+                            //    document.getElementById('mainPage').remove()
+                            //})
 
-                            categorypage()
+                            AdminProductPage()
                         }
                         else{
                             continue

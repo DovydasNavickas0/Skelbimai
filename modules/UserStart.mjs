@@ -1,5 +1,3 @@
-//import { UserLogin } from "./UserLogin.mjs";
-//import { UserRegister } from "./UserRegister.mjs";
 import { UserErrorChecker } from "./Errors.mjs";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { firebaseConfig } from "./database.mjs"

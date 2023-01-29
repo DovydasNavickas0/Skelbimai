@@ -1,15 +1,15 @@
-import { firebaseConfig } from "./database.mjs";
+import { firebaseConfig } from "../database.mjs";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
-import {getDatabase, ref, get, push} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
-import { ProductAds } from "./ProductAds.mjs";
+import {getDatabase, ref, get, set, child, update, remove, push} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+import { AdminProductPage } from "./AdminProductPage.mjs";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getDatabase();
 
 
-const IndividualProductPage = (x) => {
+const AdminIndividualProd = (x) => {
 
     const user = auth.currentUser
 
@@ -123,7 +123,7 @@ const IndividualProductPage = (x) => {
 
                 BackBtn.addEventListener("click", function(){
                     document.getElementById('mainPage').remove()
-                    ProductAds()
+                    AdminProductPage()
                 })
             }
         })
@@ -131,7 +131,9 @@ const IndividualProductPage = (x) => {
     getTable()
 
     const CommDiv = document.createElement('div')
-    CommDiv.classList.add("col-md-6", "p-5")
+    CommDiv.classList.add("col-md-12", "p-5")
+    CommDiv.style.visibility = "hidden"
+    CommDiv.setAttribute('id', 'Commdiv')
 
     const CommLabel = document.createElement('label')
     CommLabel.innerText = "Type your comments here"
@@ -148,6 +150,36 @@ const IndividualProductPage = (x) => {
     CommDiv.appendChild(CommLabel)
     CommDiv.appendChild(Comm)
     CommDiv.appendChild(Commbtn)
+
+
+    const deleteComment = (y) => {
+
+        document.getElementById(`Comment ${y}`).innerText = "deleted"
+
+        remove(ref(db, "Comments/" + `/${x}/` + y)).then(() => {
+            alert("Commnet deleted successfully");
+        })
+        .catch((error) => {
+            console.log(error);   
+        })
+    }
+
+    const editComment = (j) => {
+
+        document.getElementById('Commdiv').style.visibility = "visible"
+
+        Commbtn.addEventListener('click', function(){
+            
+            document.getElementById(`Comment ${j}`).innerText = Comm.value
+
+            update(ref(db, "Comments/" + `/${x}/` + j), {
+                Comment: Comm.value
+            }).then(
+                document.getElementById('Commdiv').style.visibility = "hidden"
+            )
+        })
+    }
+
 
     const CommentTable = () => {
 
@@ -168,15 +200,39 @@ const IndividualProductPage = (x) => {
 
                     const tdUser = document.createElement('td');
                     tdUser.classList.add("col-md-2")
-                    tdUser.innerText = snapshot.val()[i].User_Name
+                    const pUser = document.createElement('p') 
+                    pUser.innerText = snapshot.val()[i].User_Name
+                    tdUser.appendChild(pUser)
     
+                    const deletebtn = document.createElement('button')
+                    const iTrash = document.createElement('i')
+                    iTrash.classList.add("bi", "bi-trash3")
+                    deletebtn.appendChild(iTrash)
+                    deletebtn.classList.add("col-md-3", "p-3", "btn", "btn-outline-dark", "mt-0")
+
+                    const editbtn = document.createElement('button')
+                    editbtn.classList.add("col-md-3", "p-3", "btn", "btn-outline-dark", "ms-2")
+                    const iPencil = document.createElement('i')
+                    iPencil.classList.add("bi", "bi-pencil")
+                    editbtn.appendChild(iPencil)
+
                     const tdCommnet =document.createElement('td')
                     tdCommnet.classList.add("col-md-10")
                     tdCommnet.innerText = snapshot.val()[i].Comment
+                    tdCommnet.setAttribute('id', `Comment ${i}`)
 
                     tbody.appendChild(tr)
                     tr.appendChild(tdUser)
+                    tdUser.appendChild(deletebtn)
+                    tdUser.appendChild(editbtn)
                     tr.appendChild(tdCommnet)
+
+                    deletebtn.addEventListener('click', function(){
+                        deleteComment(i)
+                    })
+                    editbtn.addEventListener('click', function(){
+                        editComment(i)
+                    })
                 }
             }
             else{
@@ -186,23 +242,9 @@ const IndividualProductPage = (x) => {
     }
     CommentTable()
 
-    const CommentDB = () => { 
 
-        console.log("CommentDB activated")
-        
-        get(ref(db, "users/" + user.uid)).then((snapshot) =>{
-            if(snapshot.exists()){
-                push(ref(db, "Comments/" + x), {
-                    User_ID: user.uid,
-                    User_Name: snapshot.val().user_email,
-                    Comment: Comm.value
-                })
-            }
-        })
-    }
 
-    Commbtn.addEventListener('click', CommentDB)
 
 }
 
-export {IndividualProductPage}
+export {AdminIndividualProd}
