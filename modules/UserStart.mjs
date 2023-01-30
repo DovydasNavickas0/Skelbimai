@@ -151,7 +151,7 @@ const UserStart = () => { // works, needs css/bootstrap
                         user_email: Email.value
                 }))
                     console.log("Register Succesful")                //turn off when done
-                    errorP.remove()
+                    UserRegLogin.remove()
                 })
                 .catch((error) => {
                     //const errorCode = error.code;

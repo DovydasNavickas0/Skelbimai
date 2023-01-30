@@ -18,6 +18,10 @@ const UserPage = () => {
 
     const divextra3 = document.createElement('div')
     divextra3.classList.add("row", "col-sm-12", "col-md-12", "pt-5", "mt-5", "p-3")
+ 
+    const errorP = document.createElement('p')
+    errorP.innerText = "WARNING! User deletion will also delete all connected data to the account."
+    errorP.classList.add("text-center")
 
     const divextra4 = document.createElement('div')
     divextra4.classList.add("mt-5")
@@ -50,6 +54,7 @@ const UserPage = () => {
     tDate.classList.add("col-md-1")
     
     root.appendChild(AdsPage)
+    AdsPage.appendChild(errorP)
     AdsPage.appendChild(divextra3)
     divextra3.appendChild(divextra4)
     divextra4.appendChild(Displaytable);
@@ -62,26 +67,57 @@ const UserPage = () => {
     rowheader.appendChild(tRole)
     rowheader.appendChild(tDate);
 
-    const deleteUser = (x) => {
+    const deleteUser = (x) => { // deletes user, there roll location, products, favorites, Comments
 
         document.getElementById(`colText ${x}`).innerText = "DELETED"
 
         remove(ref(db, "users/" + x)).then(
-            alert("User deleted")
-            (function(){
-                document.getElementById(`Delete ${x}`).disabled = true;
-                document.getElementById(`Ban ${x}`).disabled = true;
-            })()
+            remove(ref(db, "Rolls/" + "/USER/" + x)).then(
+                get(ref(db, "Products/")).then((snapshot) =>{
+                    if(snapshot.exists()){
+                        for(let i in snapshot.val()){
+                            if(snapshot.val()[i].User === x){
+                                remove(ref(db, "Products/" + i)).then(
+                                    remove(ref(db, "Favorites/" + x)).then(
+                                        get(ref(db, "Comments/")).then((snapshot) => {
+                                            for(let i in snapshot.val()){
+                                                for(let j in snapshot.val()[i]){
+                                                    if(snapshot.val()[i][j].User_ID === x){
+                                                        remove(ref(db, "Comments/" + `/${i}/` + j )).then(
+                                                            alert("User and all connected data has been deleted")
+                                                        )
+                                                    }
+                                                }
+                                            }
+                                        })
+                                    )
+                                )
+                            }
+                        }
+                    }
+                })
+            )
         )
+
+        const deletion = document.getElementById(`Delete${x}`)
+        deletion.disabled = true;
+        const ban = document.getElementById(`Ban${x}`)
+        ban.disabled = true;
         
     }
 
     const banUser = (x) => {
 
+        const Icon = document.getElementById(`Icon${x}`)
+
         get(ref(db, 'users/' + x)).then((snapshot) =>{
             if(snapshot.exists()){
                 if(snapshot.val().Roll === "DISABLED"){
-                    document.getElementById(`colText ${x}`).innerText = "DISABLED"
+
+                    document.getElementById(`colText ${x}`).innerText = "USER"
+
+                    Icon.classList.remove("bi-unlock")
+                    Icon.classList.add("bi-lock")
 
                     update(ref(db, "users/" + x), {
                         Roll: "USER"
@@ -89,15 +125,19 @@ const UserPage = () => {
                         alert("User enabled")
                     )
                 }
-            }
-            else{
-                document.getElementById(`colText ${x}`).innerText = "USER"
+                else if(snapshot.val().Roll === "USER"){
 
-                update(ref(db, "users/" + x), {
-                    Roll: "DISABLED"
-                }).then(
-                    alert("User disabled")
-                )
+                    document.getElementById(`colText ${x}`).innerText = "DISABLED"
+
+                    Icon.classList.remove("bi-lock")
+                    Icon.classList.add("bi-unlock")
+    
+                    update(ref(db, "users/" + x), {
+                        Roll: "DISABLED"
+                    }).then(
+                        alert("User disabled")
+                    )
+                }
             }
         })
     }
@@ -131,21 +171,22 @@ const UserPage = () => {
                     coldate.textContent = snapshot.val()[i].last_login
 
                     const deletebtn = document.createElement('button')
-                    deletebtn.classList.add("col-md-4", "p-3", "btn", "btn-outline-dark", "mb-5", "mt-5", "d-grid", "gap-5")
-                    deletebtn.setAttribute('id', `Delete ${i}`)
+                    deletebtn.classList.add("col-md-4", "p-3", "btn", "btn-outline-dark", "mb-3", "mt-2", "d-grid", "gap-5")
+                    deletebtn.setAttribute('id', `Delete${i}`)
                     const iTrash = document.createElement('i')
                     iTrash.classList.add("bi", "bi-trash3")
                     deletebtn.appendChild(iTrash)
                     //deletebtn.setAttribute('id', `fav ${ID}`)
 
                     const Banbtn = document.createElement("button")
-                    Banbtn.classList.add("col-md-4", "p-3", "btn", "btn-outline-dark")
-                    Banbtn.setAttribute('id', `Ban ${i}`)
+                    Banbtn.classList.add("col-md-4", "p-3", "btn", "btn-outline-dark", "mb-2",)
+                    Banbtn.setAttribute('id', `Ban${i}`)
                     const BanI = document.createElement('i')
+                    BanI.setAttribute('id', `Icon${i}`)
                     if(snapshot.val()[i].Roll === "DISABLED"){
                         BanI.classList.add("bi", "bi-unlock")
                     }
-                    else{
+                    else if(snapshot.val()[i].Roll === "USER"){
                         BanI.classList.add("bi", "bi-lock")
                     }
                     Banbtn.appendChild(BanI)

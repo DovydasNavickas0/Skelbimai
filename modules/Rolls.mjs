@@ -71,9 +71,6 @@ const RollChecker = (x) => {
 
                             AdminProductPage();
                         }
-                        else{
-                            continue
-                        }
                     }
                 }else if(i === snapshot2.val().Roll && i === "USER"){
                     //console.log('Roll checker working8')
@@ -112,13 +109,7 @@ const RollChecker = (x) => {
                                 document.getElementById('mainPage').remove()
                                 FavoritedPage()})
                         }
-                        else{
-                            continue
-                        }
                     }
-                }
-                else{
-                    continue
                 }
             }
         })
