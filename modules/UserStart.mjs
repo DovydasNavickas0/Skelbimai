@@ -2,8 +2,8 @@ import { UserErrorChecker } from "./Errors.mjs";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { firebaseConfig } from "./database.mjs"
 import { getAuth, createUserWithEmailAndPassword, 
-    signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
-import {getDatabase, ref, set, update} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+    signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+import {getDatabase, get, ref, set, update} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
@@ -96,7 +96,26 @@ const UserStart = () => { // works, needs css/bootstrap
     BtnDiv.appendChild(h2extra)
     BtnDiv.appendChild(RegBTN)
 
-    const UserLogin = () => {   
+    const checker = () => {
+        get(ref(db, "users/")).then((snapshot) =>{
+
+            for(let i in snapshot.val()){
+                if(snapshot.val()[i].user_email === Email.value){
+                    if(snapshot.val()[i].Roll === "DISABLED"){
+                        errorP.innerText = "An Account with those credentials is currently disabled."
+                    }
+                    else{
+                        UserLogin()
+                    }
+                }
+                else{
+                    continue
+                }
+            }
+        })
+    }
+
+    const UserLogin = () =>{
         signInWithEmailAndPassword(auth, Email.value, Passwd.value)
         .then((userCredential) => {
             const user = userCredential.user;
@@ -110,7 +129,7 @@ const UserStart = () => { // works, needs css/bootstrap
         .catch((error) => {
             //const errorCode = error.code;
             //const errorMessage = error.message;
-            TextError.textContent = UserErrorChecker(error.code)
+            errorP.textContent = UserErrorChecker(error.code)
         });
     
     }
@@ -132,26 +151,26 @@ const UserStart = () => { // works, needs css/bootstrap
                         user_email: Email.value
                 }))
                     console.log("Register Succesful")                //turn off when done
-                    UserRegLogin.remove()
+                    errorP.remove()
                 })
                 .catch((error) => {
                     //const errorCode = error.code;
                     //const errorMessage = error.message;
                     console.log(error.message);                      //turn off when done
                     console.log(error.code);
-                    TextError.textContent = UserErrorChecker(error.code)
+                    errorP.textContent = UserErrorChecker(error.code)
                 });
             }
             else{
-                TextError.textContent = "Your Password isn't the minimum lenght of 8"
+                errorP.textContent = "Your Password isn't the minimum lenght of 8"
             }
         }
         else{
-            TextError.textContent = "Your password has to contain both letter and numbers" // rewrite it
+            errorP.textContent = "Your password has to contain both letter and numbers" // rewrite it
         }
     }
 
-    LoginBTN.addEventListener("click", UserLogin)
+    LoginBTN.addEventListener("click", checker)
     RegBTN.addEventListener("click", UserRegister)
 
 }

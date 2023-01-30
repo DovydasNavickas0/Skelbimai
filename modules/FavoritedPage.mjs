@@ -2,6 +2,7 @@ import { firebaseConfig } from "./database.mjs";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 import {getDatabase, ref, get, remove, push} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+import { IndividualProductPage } from "./IndividualProdPage.mjs";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
@@ -35,11 +36,15 @@ const FavoritedPage = () => {
 
     const listName = document.createElement('th');
     listName.innerText = "Name";
-    listName.classList.add("col-md-2")
+    listName.classList.add("col-md-1")
 
     const listCategory = document.createElement('th');
     listCategory.innerText = "Category";
-    listCategory.classList.add("col-md-2")
+    listCategory.classList.add("col-md-1")
+
+    const listDate = document.createElement('th');
+    listDate.innerText = "Creation Date"
+    listDate.classList.add("col-md-1")
     
     const listPrice = document.createElement('th');
     listPrice.innerText = "Price";
@@ -47,11 +52,11 @@ const FavoritedPage = () => {
     
     const listDescription = document.createElement('th');
     listDescription.innerText = "Description";
-    listDescription.classList.add("col-md-3")
+    listDescription.classList.add("col-md-2")
     
     const listImg = document.createElement('th');
     listImg.innerText = "Image";
-    listImg.classList.add("col-md-3")
+    listImg.classList.add("col-md-2")
     
     root.appendChild(AdsPage)
     AdsPage.appendChild(divextra3)
@@ -62,11 +67,11 @@ const FavoritedPage = () => {
     thead.appendChild(rowheader);
     rowheader.appendChild(listBtn)
     rowheader.appendChild(listName);
-    rowheader.appendChild(listCategory)
+    rowheader.appendChild(listCategory);
+    rowheader.appendChild(listDate);
     rowheader.appendChild(listPrice);
     rowheader.appendChild(listDescription);
     rowheader.appendChild(listImg);
-
 
     const FavouriteDB = (x) => {
 
@@ -139,11 +144,14 @@ const FavoritedPage = () => {
                                         colname.textContent = snapshotProduct.val()[ProdID].Name;
         
                                         const colbtn = document.createElement('td')
+                                        colbtn.setAttribute('align', 'center')
         
                                         const colcategory = document.createElement('td');
                                         colcategory.textContent = snapshotProduct.val()[ProdID].Category;
         
-        
+                                        const coldate = document.createElement('td');
+                                        coldate.textContent = snapshotProduct.val()[ProdID].CreationDate
+
                                         const colprice = document.createElement('td');
                                         colprice.textContent = snapshotProduct.val()[ProdID].Price;
         
@@ -159,9 +167,15 @@ const FavoritedPage = () => {
         
         
                                         const favbtn = document.createElement('button')
-                                        favbtn.classList.add("btn", "btn-outline-dark")
+                                        favbtn.classList.add("col-md-5", "p-3", "btn", "btn-outline-dark", "mb-5", "mt-5", "d-grid", "gap-5")
                                         const favI = document.createElement('i')
                                         favI.setAttribute('id', `fav ${ProdID}`)
+            
+            
+                                        const Commentbtn = document.createElement("button")
+                                        Commentbtn.classList.add("col-md-5", "p-3", "btn", "btn-outline-dark")
+                                        const CommentI = document.createElement('i')
+                                        CommentI.classList.add("bi", "bi-chat-right-text")
         
                                         const fav = () => {
                                     
@@ -193,18 +207,24 @@ const FavoritedPage = () => {
                                         }
                                         fav()
                                     
-                                        tbody.appendChild(rowproduct)
+                                        tbody.appendChild(rowproduct);
                                         colimage.appendChild(imgsrc);
                                         rowproduct.appendChild(colbtn)
                                         rowproduct.appendChild(colname);
                                         rowproduct.appendChild(colcategory);
+                                        rowproduct.appendChild(coldate);
                                         rowproduct.appendChild(colprice);
                                         rowproduct.appendChild(ColDesc);
                                         rowproduct.appendChild(colimage);
-                                        colbtn.appendChild(favbtn)
-                                        favbtn.appendChild(favI)
+                                        colbtn.appendChild(favbtn);
+                                        colbtn.appendChild(Commentbtn);
+                                        favbtn.appendChild(favI);
+                                        Commentbtn.appendChild(CommentI);
             
                                         favbtn.addEventListener('click', function(){FavouriteDB(ProdID)})
+                                        Commentbtn.addEventListener('click', function(){
+                                            document.getElementById('mainPage').remove()
+                                            IndividualProductPage(ProdID, 3)})
                                     }
                                     else{
                                         continue

@@ -1,7 +1,7 @@
 import { firebaseConfig } from "../database.mjs";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
-import {getDatabase, ref, get, set, child, update, remove, push} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+import {getDatabase, ref, get, update, remove} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 import { AdminProductPage } from "./AdminProductPage.mjs";
 
 const app = initializeApp(firebaseConfig);

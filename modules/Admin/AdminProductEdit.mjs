@@ -1,4 +1,4 @@
-import { firebaseConfig } from "../database.mjs"
+import { firebaseConfig } from "../database.mjs";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 import {getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
@@ -155,8 +155,6 @@ const AdminProductEdit = (x) => {
     divImg.appendChild(inputImg)
     
     divBtn.appendChild(updaterbtn)
-
-    const user = auth.currentUser
 
     const ProductEdit = (j) => {
 

@@ -6,6 +6,7 @@ import {getDatabase, ref, get} from "https://www.gstatic.com/firebasejs/9.15.0/f
 //import { SYSUserStart } from "./modules/SYSad/SYSUserStart.mjs";
 import { categorypage } from "./Admin/Categories.mjs";
 import { AdminProductPage } from "./Admin/AdminProductPage.mjs";
+import { UserPage } from "./Admin/UserPage.mjs";
 
 import { ProductPage } from "./ProductPage.mjs";
 import { ProductAds } from "./ProductAds.mjs";
@@ -56,18 +57,19 @@ const RollChecker = (x) => {
                             nav.appendChild(nav3btn)
 
                             nav1btn.addEventListener('click', function(){
-                                document.getElementById('mainPage').remove()
-                                AdminProductPage()
+                                document.getElementById('mainPage').remove();
+                                AdminProductPage();
                             })
                             nav2btn.addEventListener('click', function(){
-                                document.getElementById('mainPage').remove()
-                                categorypage()
+                                document.getElementById('mainPage').remove();
+                                categorypage();
                             })
-                            //nav3btn.addEventListener('click', function(){
-                            //    document.getElementById('mainPage').remove()
-                            //})
+                            nav3btn.addEventListener('click', function(){
+                                document.getElementById('mainPage').remove();
+                                UserPage();
+                            })
 
-                            AdminProductPage()
+                            AdminProductPage();
                         }
                         else{
                             continue
@@ -114,6 +116,9 @@ const RollChecker = (x) => {
                             continue
                         }
                     }
+                }
+                else{
+                    continue
                 }
             }
         })

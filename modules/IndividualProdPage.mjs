@@ -3,13 +3,15 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebas
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 import {getDatabase, ref, get, push} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 import { ProductAds } from "./ProductAds.mjs";
+import { ProductPage } from "./ProductPage.mjs";
+import { FavoritedPage } from "./FavoritedPage.mjs";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getDatabase();
 
 
-const IndividualProductPage = (x) => {
+const IndividualProductPage = (x, b) => {
 
     const user = auth.currentUser
 
@@ -123,7 +125,21 @@ const IndividualProductPage = (x) => {
 
                 BackBtn.addEventListener("click", function(){
                     document.getElementById('mainPage').remove()
-                    ProductAds()
+
+                    switch(b){
+                        case 1:
+                            ProductAds()
+                            return
+                
+                        case 2:
+                            ProductPage()
+                            return
+                
+                        case 3:
+                            FavoritedPage()
+                            return
+                    }
+                    
                 })
             }
         })
@@ -149,6 +165,31 @@ const IndividualProductPage = (x) => {
     CommDiv.appendChild(Comm)
     CommDiv.appendChild(Commbtn)
 
+    const deleteComment = (y) => {
+
+        document.getElementById(`Comment ${y}`).innerText = "deleted"
+
+        remove(ref(db, "Comments/" + `/${x}/` + y)).then(() => {
+            alert("Commnet deleted successfully");
+        })
+        .catch((error) => {
+            console.log(error);   
+        })
+    }
+
+    const editComment = (j) => {
+
+        Commbtn.addEventListener('click', function(){
+            
+            document.getElementById(`Comment ${j}`).innerText = Comm.value
+
+            update(ref(db, "Comments/" + `/${x}/` + j), {
+                Comment: Comm.value
+            })
+        })
+    }
+
+
     const CommentTable = () => {
 
         get(ref(db, "Comments/" + x)).then((snapshot) =>{
@@ -168,15 +209,47 @@ const IndividualProductPage = (x) => {
 
                     const tdUser = document.createElement('td');
                     tdUser.classList.add("col-md-2")
-                    tdUser.innerText = snapshot.val()[i].User_Name
-    
+                    const pUser = document.createElement('p') 
+                    pUser.innerText = snapshot.val()[i].User_Name
+                    tdUser.appendChild(pUser)
+
                     const tdCommnet =document.createElement('td')
                     tdCommnet.classList.add("col-md-10")
                     tdCommnet.innerText = snapshot.val()[i].Comment
+                    tdCommnet.setAttribute('id', `Comment ${i}`)
 
                     tbody.appendChild(tr)
                     tr.appendChild(tdUser)
                     tr.appendChild(tdCommnet)
+
+                    if(snapshot.val()[i].User_ID === user.uid){
+
+                        const deletebtn = document.createElement('button')
+                        const iTrash = document.createElement('i')
+                        iTrash.classList.add("bi", "bi-trash3")
+                        deletebtn.appendChild(iTrash)
+                        deletebtn.classList.add("col-md-3", "p-3", "btn", "btn-outline-dark", "mt-0")
+    
+                        const editbtn = document.createElement('button')
+                        editbtn.classList.add("col-md-3", "p-3", "btn", "btn-outline-dark", "ms-2")
+                        const iPencil = document.createElement('i')
+                        iPencil.classList.add("bi", "bi-pencil")
+                        editbtn.appendChild(iPencil)
+
+                        tdUser.appendChild(deletebtn)
+                        tdUser.appendChild(editbtn)
+
+                        deletebtn.addEventListener('click', function(){
+                            deleteComment(i)
+                        })
+                        editbtn.addEventListener('click', function(){
+                            editComment(i)
+                        })
+
+                    }
+                    else{
+                        continue
+                    }
                 }
             }
             else{
@@ -184,8 +257,8 @@ const IndividualProductPage = (x) => {
             }
         })
     }
-    CommentTable()
 
+    CommentTable()
     const CommentDB = () => { 
 
         console.log("CommentDB activated")

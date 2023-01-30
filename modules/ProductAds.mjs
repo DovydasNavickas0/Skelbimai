@@ -227,7 +227,7 @@ const ProductAds = () => {
                             favbtn.addEventListener('click', function(){FavouriteDB(ID)})
                             Commentbtn.addEventListener('click', function(){
                                 document.getElementById('mainPage').remove()
-                                IndividualProductPage(ID)})
+                                IndividualProductPage(ID, 1)})
                         }
                     }
                 }

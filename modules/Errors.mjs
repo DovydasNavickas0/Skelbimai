@@ -17,7 +17,7 @@ const UserErrorChecker = (x) => {
             return Explanation4
         
         case "auth/invalid-password":
-            let Explanation5 = 'Your password is invalid' //something went tits up
+            let Explanation5 = 'Your password is invalid' //something went very wrong
             return Explanation5
 
         case "auth/operation-not-allowed":

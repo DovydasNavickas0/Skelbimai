@@ -2,6 +2,7 @@ import { firebaseConfig } from "./database.mjs";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 import {getDatabase, ref, get, update, remove, push} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+import { IndividualProductPage } from "./IndividualProdPage.mjs";
 
 //Insert works
 //Delete works
@@ -349,22 +350,31 @@ const ProductPage = () => {
                             imgsrc.src = snapshot.val()[ID].ImgLink;
                             imgsrc.classList.add("w-100");
 
-                            const editbtn = document.createElement('button')
-                            editbtn.classList.add("col-md-6", "p-3", "btn", "btn-outline-dark")
-                            const iPencil = document.createElement('i')
-                            iPencil.classList.add("bi", "bi-pencil")
-                            editbtn.appendChild(iPencil)
-
                             const deletebtn = document.createElement('button')
                             const iTrash = document.createElement('i')
                             iTrash.classList.add("bi", "bi-trash3")
                             deletebtn.appendChild(iTrash)
-                            deletebtn.classList.add("col-md-6", "p-3", "btn", "btn-outline-dark", "mb-5", "mt-5", "d-grid", "gap-5")
+                            deletebtn.classList.add("col-md-5", "p-3", "btn", "btn-outline-dark", "mb-1", "mt-5", "d-grid", "gap-0")
+
+
+                            const editbtn = document.createElement('button')
+                            editbtn.classList.add("col-md-5", "p-3", "btn", "btn-outline-dark", "me-1")
+                            const iPencil = document.createElement('i')
+                            iPencil.classList.add("bi", "bi-pencil")
+                            editbtn.appendChild(iPencil)
+
+
+                            const Commentbtn = document.createElement("button")
+                            Commentbtn.classList.add("col-md-5", "p-3", "btn", "btn-outline-dark")
+                            const CommentI = document.createElement('i')
+                            CommentI.classList.add("bi", "bi-chat-right-text")
+                            Commentbtn.appendChild(CommentI);
     
                             colimage.appendChild(imgsrc);
                             rowproduct.appendChild(colbtn)
                             colbtn.appendChild(deletebtn)
                             colbtn.appendChild(editbtn)
+                            colbtn.appendChild(Commentbtn)
                             rowproduct.appendChild(colname);
                             rowproduct.appendChild(colcategory);
                             rowproduct.appendChild(colprice);
@@ -374,6 +384,9 @@ const ProductPage = () => {
 
                             deletebtn.addEventListener('click', function() {ProductsDeletion(ID)})
                             editbtn.addEventListener('click', function(){ProductEdit(ID)})
+                            Commentbtn.addEventListener('click', function(){
+                                document.getElementById('mainPage').remove()
+                                IndividualProductPage(ID, 2)})
                         }
                     }
                 }
